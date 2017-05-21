@@ -1,4 +1,5 @@
 import osero_util as ou
+import sys
 from copy import deepcopy
 
 class OseroBoard:
@@ -31,17 +32,29 @@ class OseroBoard:
 
     def next_turn(self):
         self._turn = not(self._turn)
-        self._count += 1
             
     def put_stone(self,stone):
-        if self._turn :
-            print("[O player input]>",end="")
+        put_list = ou.reversible(self._board, stone)
+        if len(put_list) != 0:
+            if self._turn :
+                print("[O player input]>",end="")
+            else:
+                print("[X player input]>",end="")
+            try:
+                x,y = [int(i) for i in input().split()]
+                if((x,y) in put_list):
+                    self._board[y][x] = stone
+                    self._count += 1
+                    self.reverse_stone(x,y,stone)
+                    self.print_board()
+                    self.next_turn()
+                else:
+                    print("---Position Error!!---")
+            except:
+                print("---Syntax Error!!---")
         else:
-            print("[X player input]>",end="")
-        x,y = [int(i) for i in input().split()]
-        self._board[y][x] = stone
-        self.reverse_stone(x,y,stone)
-        self.print_board()
+            print("---PASS---")
+            self.next_turn()
 
     def reverse_stone(self,x,y,stone):
         new_board = deepcopy(self._board)
@@ -99,10 +112,24 @@ class OseroBoard:
 
 
     def play(self):
-        while self._winner is None:
+        while self._count<60:
             self.put_stone(self._turn)
-            self.next_turn()
+        true_score =  self._judge()
+        if true_score < 32:
+            print("Winner is O Player!!!")
+        elif true_score > 32:
+            print("Winner is X Player!!!")
+        else:
+            print("Draw")
 
+    def judge(self):
+        score = 0
+        for i in range(0, 8):
+            for j in range(0, 8):
+                if self._board[i][j] == true:
+                    score += 1
+        return score
+            
 
 if __name__ == "__main__":
     b = OseroBoard()

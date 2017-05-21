@@ -9,7 +9,7 @@ def right_check(board, x, y, stone):
                 return True
             elif board[y][k] == None:
                 break
-            return False
+    return False
 
 def left_check(board, x, y, stone):
     enemy = not(stone)
@@ -19,7 +19,7 @@ def left_check(board, x, y, stone):
                 return True
             elif board[y][k] == None:
                 break
-            return False
+    return False
 
 def up_check(board, x, y, stone):
     enemy = not(stone)
@@ -29,7 +29,7 @@ def up_check(board, x, y, stone):
                 return True
             elif board[k][x] == None:
                 break
-            return False
+    return False
 
 def down_check(board, x, y, stone):
     enemy = not(stone)
@@ -39,7 +39,7 @@ def down_check(board, x, y, stone):
                 return True
             elif board[k][x] == None:
                 break
-            return False
+    return False
 
 def right_up_check(board, x, y, stone):
     enemy = not(stone)
@@ -69,7 +69,7 @@ def left_up_check(board, x, y, stone):
     enemy = not(stone)
     if x>=2 and y>=2 and board[y-1][x-1] == enemy:
         k=2
-        while x+k>=0 and y-k>=0:
+        while x-k>=0 and y-k>=0:
             if board[y-k][x-k] == stone:
                 return True
             elif board[y-k][x-k] == None:
@@ -81,7 +81,7 @@ def left_down_check(board, x, y, stone):
     enemy = not(stone)
     if x>=2 and y<=5 and board[y+1][x-1] == enemy:
         k=2
-        while x+k>=0 and y-k<8:
+        while x-k>=0 and y+k<8:
             if board[y+k][x-k] == stone:
                 return True
             elif board[y+k][x-k] == None:
@@ -89,4 +89,33 @@ def left_down_check(board, x, y, stone):
             k+=1
     return False
 
-    
+def reversible(board, stone):
+    list = []
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if board[j][i] == None:
+                if right_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if left_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if up_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if down_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if right_up_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if right_down_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if left_up_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+                if left_down_check(board,i,j,stone):
+                    list.append((i,j))
+                    continue
+    return list
